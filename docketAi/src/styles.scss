@@ -25,3 +25,19 @@ button {
 input {
   font-family: inherit;
 }
+
+.messages { width: 100%; max-width: 900px; margin: 0 auto 16px; overflow-y: auto; max-height: 60vh; }
+.msg { margin: 8px 0; padding: 10px 14px; border-radius: 10px; background: #f3f4f8;
+  &.user { background: #ece8ff; margin-left: 20%; }
+  &.err { background: #fde8e8; color: #b42318; }
+  p { margin: 0 0 6px; font-size: 14px; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; font-size: 12px; width: 100%;
+    th, td { text-align: left; padding: 4px 8px; border-bottom: 1px solid #ddd; white-space: nowrap; } }
+}
+
+.recents-empty { font-size: 13px; opacity: .6; margin: 0; }
+.recents-list { list-style: none; margin: 0; padding: 0; }
+.recent-item { width: 100%; text-align: left; background: none; border: 0; padding: 6px 8px; border-radius: 6px;
+  font-size: 13px; cursor: pointer; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  &:hover { background: rgba(128, 128, 128, .15); } }

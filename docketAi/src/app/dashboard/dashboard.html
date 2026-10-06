@@ -1,0 +1,118 @@
+<section class="dashboard">
+  <header class="dash-header">
+    <h2>Analytics Dashboard</h2>
+    <button (click)="load()" [disabled]="loading()">Refresh</button>
+  </header>
+
+  @if (loading()) {
+    <p class="state">Loading…</p>
+  } @else if (error()) {
+    <p class="state error">{{ error() }}</p>
+  } @else {
+    @if (summary(); as s) {
+      <div class="cards">
+        <div class="card"><span>Producers</span><strong>{{ s.overallStatistics.totalProducers }}</strong></div>
+        <div class="card"><span>Tasks</span><strong>{{ s.overallStatistics.totalTasks }}</strong></div>
+        <div class="card"><span>Carriers</span><strong>{{ s.overallStatistics.totalCarriers }}</strong></div>
+        <div class="card"><span>Agencies</span><strong>{{ s.overallStatistics.totalAgencies }}</strong></div>
+        <div class="card warn"><span>Overdue tasks</span><strong>{{ s.keyMetrics.overdueTasks }}</strong></div>
+        <div class="card warn"><span>High priority</span><strong>{{ s.keyMetrics.highPriorityTasks }}</strong></div>
+        <div class="card"><span>Active producers</span><strong>{{ s.keyMetrics.activeProducers }}</strong></div>
+        <div class="card"><span>Pending producers</span><strong>{{ s.keyMetrics.pendingProducers }}</strong></div>
+        <div class="card"><span>Active carriers</span><strong>{{ s.keyMetrics.activeCarriers }}</strong></div>
+        <div class="card"><span>Completed (30d)</span><strong>{{ s.keyMetrics.tasksCompletedLast30Days }}</strong></div>
+      </div>
+    }
+
+    <div class="grid">
+      @if (tasks(); as t) {
+        <div class="panel">
+          <h3>Tasks by status</h3>
+          @for (e of t.tasksByStatus | keyvalue; track e.key) {
+            <div class="bar-row"><label>{{ e.key }}</label>
+              <div class="bar"><i [style.width.%]="pct(e.value, t.tasksByStatus)"></i></div><b>{{ e.value }}</b></div>
+          }
+        </div>
+        <div class="panel">
+          <h3>Tasks by priority</h3>
+          @for (e of t.tasksByPriority | keyvalue; track e.key) {
+            <div class="bar-row"><label>{{ e.key }}</label>
+              <div class="bar"><i [style.width.%]="pct(e.value, t.tasksByPriority)"></i></div><b>{{ e.value }}</b></div>
+          }
+        </div>
+        <div class="panel">
+          <h3>Tasks by time bucket</h3>
+          @for (e of t.tasksByTimeBucket | keyvalue; track e.key) {
+            <div class="bar-row"><label>{{ e.key }}</label>
+              <div class="bar"><i [style.width.%]="pct(e.value, t.tasksByTimeBucket)"></i></div><b>{{ e.value }}</b></div>
+          }
+        </div>
+        <div class="panel">
+          <h3>Daily completions</h3>
+          <div class="trend">
+            @for (d of t.dailyCompletionTrend; track d.date) {
+              <div class="col" [title]="d.date + ': ' + d.count">
+                <i [style.height.%]="(d.count / maxDaily()) * 100"></i>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (producers(); as p) {
+        <div class="panel">
+          <h3>Producers by status</h3>
+          @for (e of p.producersByStatus | keyvalue; track e.key) {
+            <div class="bar-row"><label>{{ e.key }}</label>
+              <div class="bar"><i [style.width.%]="pct(e.value, p.producersByStatus)"></i></div><b>{{ e.value }}</b></div>
+          }
+        </div>
+        <div class="panel">
+          <h3>Producers by state</h3>
+          @for (e of p.producersByState | keyvalue; track e.key) {
+            <div class="bar-row"><label>{{ e.key }}</label>
+              <div class="bar"><i [style.width.%]="pct(e.value, p.producersByState)"></i></div><b>{{ e.value }}</b></div>
+          }
+        </div>
+        <div class="panel wide">
+          <h3>Producers &amp; task counts</h3>
+          <table>
+            <thead><tr><th>Name</th><th>Status</th><th>State</th><th>Tasks</th></tr></thead>
+            <tbody>
+              @for (r of p.producersWithTaskCounts; track r.producerId) {
+                <tr><td>{{ r.producerName }}</td><td>{{ r.status }}</td><td>{{ r.state }}</td><td>{{ r.taskCount }}</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      @if (carriers(); as c) {
+        <div class="panel">
+          <h3>Carriers by status</h3>
+          @for (e of c.carriersByStatus | keyvalue; track e.key) {
+            <div class="bar-row"><label>{{ e.key }}</label>
+              <div class="bar"><i [style.width.%]="pct(e.value, c.carriersByStatus)"></i></div><b>{{ e.value }}</b></div>
+          }
+        </div>
+        <div class="panel">
+          <h3>Carriers by state</h3>
+          @for (e of c.carriersByState | keyvalue; track e.key) {
+            <div class="bar-row"><label>{{ e.key }}</label>
+              <div class="bar"><i [style.width.%]="pct(e.value, c.carriersByState)"></i></div><b>{{ e.value }}</b></div>
+          }
+        </div>
+      }
+
+      @if (agencies(); as a) {
+        <div class="panel">
+          <h3>Agencies by state</h3>
+          @for (e of a.agenciesByState | keyvalue; track e.key) {
+            <div class="bar-row"><label>{{ e.key }}</label>
+              <div class="bar"><i [style.width.%]="pct(e.value, a.agenciesByState)"></i></div><b>{{ e.value }}</b></div>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

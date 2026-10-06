@@ -39,6 +39,12 @@
         </svg>
         <span>Docket Act</span>
       </a>
+      <a routerLink="/dashboard" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <rect x="3" y="10" width="3" height="7"/><rect x="8" y="5" width="3" height="12"/><rect x="13" y="8" width="3" height="9"/>
+        </svg>
+        <span>Dashboard</span>
+      </a>
       <a href="#" class="nav-item">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
           <circle cx="10" cy="10" r="7"/>
@@ -49,11 +55,15 @@
 
     <div class="recents-section">
       <h3 class="recents-title">Recents</h3>
-      <div class="sign-in-prompt">
-        <p>To keep and access your sessions,</p>
-        <a href="#" class="sign-in-link">sign in</a>
-        <p>. Sessions started before signing in won't be saved.</p>
-      </div>
+      @if (recents().length === 0) {
+        <p class="recents-empty">No recent prompts yet.</p>
+      } @else {
+        <ul class="recents-list">
+          @for (r of recents(); track r) {
+            <li><button type="button" class="recent-item" [title]="r" (click)="userInput.set(r)">{{ r }}</button></li>
+          }
+        </ul>
+      }
     </div>
 
     <div class="sidebar-footer">
@@ -73,17 +83,13 @@
           </svg>
         </button>
       </div>
-      <div class="footer-links">
-        <a href="#">Terms of Use</a>
-        <a href="#">Privacy Notice</a>
-        <a href="#">Consumer Health Data Privacy Disclosure</a>
-        <a href="#">Your Ads Privacy Choices</a>
-      </div>
     </div>
   </aside>
 
   <!-- Main Content Area -->
   <main class="main-content">
+    <router-outlet />
+    @if (!onDashboard()) {
     <div class="chat-header">
       <button class="model-selector">
         <span class="model-name">Docket</span>
@@ -95,7 +101,30 @@
     </div>
 
     <div class="chat-content">
-      <h2 class="welcome-message">Let's dive in!</h2>
+      @if (messages().length === 0) {
+        <h2 class="welcome-message">Let's dive in!</h2>
+      } @else {
+        <div class="messages">
+          @for (m of messages(); track $index) {
+            <div class="msg" [class.user]="m.role === 'user'" [class.err]="m.error">
+              <p>{{ m.text }}</p>
+              @if (m.rows?.length) {
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr>@for (c of m.columns; track c) {<th>{{ c }}</th>}</tr></thead>
+                    <tbody>
+                      @for (r of m.rows; track $index) {
+                        <tr>@for (c of m.columns; track c) {<td>{{ cell(r[c]) }}</td>}</tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+            </div>
+          }
+          @if (sending()) { <div class="msg"><p>Thinking…</p></div> }
+        </div>
+      }
 
       <div class="input-container">
         <div class="input-wrapper">
@@ -110,6 +139,7 @@
             placeholder="Submit your question here..."
             [value]="userInput()"
             (input)="userInput.set($any($event.target).value)"
+            (keydown.enter)="send()"
           />
           <button class="mode-btn">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -119,18 +149,13 @@
             <span>Low</span>
           </button>
         </div>
-        <button class="submit-btn" [disabled]="!userInput()" aria-label="Send message">
+        <button class="submit-btn" [disabled]="!userInput() || sending()" (click)="send()" aria-label="Send message">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
             <path d="M10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3ZM8 7L12 10L8 13V7Z"/>
           </svg>
         </button>
       </div>
-
-      <div class="disclaimer">
-        By submitting a question, you agree to Docket AI's
-        <a href="#">Privacy Notice</a> and the
-        <a href="#">Terms of Use</a>. Docket AI may not always get it right.
-      </div>
     </div>
+    }
   </main>
 </div>
