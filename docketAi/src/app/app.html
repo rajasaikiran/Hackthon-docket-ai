@@ -1,0 +1,136 @@
+<div class="chat-container">
+  <!-- Left Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 4L4 10V22L16 28L28 22V10L16 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 10L16 16L28 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 28V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1 class="brand-name">Docket AI</h1>
+      </div>
+      <button class="expand-btn" aria-label="Toggle sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <rect x="3" y="3" width="14" height="2" rx="1"/>
+          <rect x="3" y="9" width="14" height="2" rx="1"/>
+          <rect x="3" y="15" width="14" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+
+    <button class="new-chat-btn">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M3 10H17M10 3V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>New chat</span>
+    </button>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M10 3L3 8V17H7V12H13V17H17V8L10 3Z"/>
+        </svg>
+        <span>Docket Sonic</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <rect x="3" y="3" width="14" height="14" rx="2"/>
+        </svg>
+        <span>Docket Act</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <circle cx="10" cy="10" r="7"/>
+        </svg>
+        <span>API</span>
+      </a>
+    </nav>
+
+    <div class="recents-section">
+      <h3 class="recents-title">Recents</h3>
+      <div class="sign-in-prompt">
+        <p>To keep and access your sessions,</p>
+        <a href="#" class="sign-in-link">sign in</a>
+        <p>. Sessions started before signing in won't be saved.</p>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="avatar">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <circle cx="10" cy="7" r="3"/>
+            <path d="M4 18C4 14.6863 6.68629 12 10 12C13.3137 12 16 14.6863 16 18"/>
+          </svg>
+        </div>
+        <span>Guest</span>
+        <button class="menu-btn" aria-label="User menu">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <circle cx="8" cy="4" r="1.5"/>
+            <circle cx="8" cy="8" r="1.5"/>
+            <circle cx="8" cy="12" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+      <div class="footer-links">
+        <a href="#">Terms of Use</a>
+        <a href="#">Privacy Notice</a>
+        <a href="#">Consumer Health Data Privacy Disclosure</a>
+        <a href="#">Your Ads Privacy Choices</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="chat-header">
+      <button class="model-selector">
+        <span class="model-name">Docket</span>
+        <span class="model-tag">&#64;docket</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M4 6L8 10L12 6"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="chat-content">
+      <h2 class="welcome-message">Let's dive in!</h2>
+
+      <div class="input-container">
+        <div class="input-wrapper">
+          <button class="attach-btn" aria-label="Attach file">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+              <path d="M17 8.5L9.5 16C7.84315 17.6569 5.15685 17.6569 3.5 16C1.84315 14.3431 1.84315 11.6569 3.5 10L11 2.5C12.1046 1.39543 13.8954 1.39543 15 2.5C16.1046 3.60457 16.1046 5.39543 15 6.5L7.5 14C6.94772 14.5523 6.05228 14.5523 5.5 14C4.94772 13.4477 4.94772 12.5523 5.5 12L12.5 5" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <input
+            type="text"
+            class="chat-input"
+            placeholder="Submit your question here..."
+            [value]="userInput()"
+            (input)="userInput.set($any($event.target).value)"
+          />
+          <button class="mode-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 3L10 7H6L8 3Z"/>
+              <circle cx="8" cy="10" r="2"/>
+            </svg>
+            <span>Low</span>
+          </button>
+        </div>
+        <button class="submit-btn" [disabled]="!userInput()" aria-label="Send message">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3ZM8 7L12 10L8 13V7Z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="disclaimer">
+        By submitting a question, you agree to Docket AI's
+        <a href="#">Privacy Notice</a> and the
+        <a href="#">Terms of Use</a>. Docket AI may not always get it right.
+      </div>
+    </div>
+  </main>
+</div>
